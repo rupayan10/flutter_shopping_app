@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:shop_app/models/product.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shop_app/providers/product.dart';
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -37,11 +37,26 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  bool _showFavouritesOnly = false;
+
   List<Product> get items {
+    if (_showFavouritesOnly) {
+      return _items.where((item) => item.isFavourite).toList();
+    }
     return [..._items];
   }
 
   Product findById(String id) {
     return _items.firstWhere((product) => product.id == id);
+  }
+
+  void showFavouritesOnly() {
+    _showFavouritesOnly = true;
+    notifyListeners();
+  }
+
+  void showAll() {
+    _showFavouritesOnly = false;
+    notifyListeners();
   }
 }
